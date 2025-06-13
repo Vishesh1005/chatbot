@@ -13,7 +13,7 @@ form.addEventListener("submit", async (e) => {
   input.value = "";
 
   try {
-    const res = await fetch("http://localhost:8000/chat", {
+    const res = await fetch("https://chatbot-backend-c6vk.onrender.com/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
