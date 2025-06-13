@@ -1,0 +1,11 @@
+Welcome to ITS College Admissions.
+
+- Courses Offered: BCA, BBA, MBA, MCA, PGDM
+- Eligibility: Min 50% in 12th for UG, graduation for PG
+- Documents Required: 10th, 12th marksheet, ID proof, photos
+- Admission Process: Fill online form, pay fee, submit docs
+- Deadline: Applications open from May 1 to July 15
+- Scholarships: Based on merit and economic background
+-Fees for BBA and BCA Course : 45,000 per semester
+-Fees for MBA, MCA , PGDM Course : 75,000 per semester
+We’re here to help you at every step of the admission process!
