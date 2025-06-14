@@ -1,9 +1,11 @@
 fastapi
 uvicorn
-langchain
-langchain-community
-langchain-together
-langchain-huggingface
-sentence-transformers
-mysql-connector-python
 python-dotenv
+mysql-connector-python
+langchain
+langchain-core
+langchain-community
+langchain-huggingface
+langchain-together
+sentence-transformers
+python-multipart
