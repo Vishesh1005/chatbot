@@ -34,4 +34,8 @@ form.addEventListener("submit", async (e) => {
     console.error("❌ Chat error:", err);
     chatArea.innerHTML += `<div class="bot-message">❌ Server error</div>`;
   }
+  document.getElementById("end-chat-btn").addEventListener("click", () => {
+  window.location.href = "form.html";  // Redirect to form page
+});
+
 });
