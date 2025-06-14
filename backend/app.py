@@ -22,13 +22,7 @@ app.add_middleware(
 # ✅ Lazy-load paths only
 index_path = os.path.join(os.path.dirname(__file__), "Documents", "index")
 
-import urllib.parse
-import os
-
 try:
-    db_url = os.getenv("DATABASE_URL")
-    parsed_url = urllib.parse.urlparse(db_url)
-
     db = psycopg2.connect(
         dbname=parsed_url.path[1:],
         user=parsed_url.username,
@@ -38,6 +32,10 @@ try:
     )
     cursor = db.cursor()
     print("✅ PostgreSQL connected.")
+except Exception as e:
+    print("❌ PostgreSQL connection failed:", e)
+    db = None
+    cursor = None
 
 
 # ======== Data Model ========
