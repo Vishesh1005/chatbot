@@ -2,79 +2,83 @@ from fastapi import FastAPI, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+import mysql.connector
 import os
 from dotenv import load_dotenv
-import mysql.connector
-
+from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain_together import ChatTogether
-
-# Do NOT load these at startup
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
 
+# Load environment variables
 load_dotenv()
+
 app = FastAPI()
 
-# CORS
+# ✅ CORS FIX: Allow GitHub Pages
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://vishesh1005.github.io"],  # ✅ your GitHub Pages URL
+    allow_origins=["https://vishesh1005.github.io"],  # 👈 GitHub Pages domain
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Globals — load later
-vectordb = None
-embedding = None
+# ✅ Lazy-load paths only
+index_path = os.path.join(os.path.dirname(__file__), "Documents", "index")
 
-# MySQL
+# ✅ DB Connection
 try:
     db = mysql.connector.connect(
         host="localhost",
         user="root",
         password="Vishesh@1005",
-        database="chatbot"
+        database="chatbot",
+        connection_timeout=5
     )
     cursor = db.cursor()
-except:
+    print("✅ MySQL connected.")
+except Exception as e:
+    print("❌ MySQL connection failed:", e)
+    db = None
     cursor = None
 
-# Models
+# ======== Data Model ========
 class Message(BaseModel):
     text: str
 
-# Chat endpoint
+# ======== Chat Route ========
 @app.post("/chat")
 async def chat(msg: Message):
-    global vectordb, embedding
-
-    if vectordb is None:
-        print("🧠 Lazy-loading embedding & FAISS...")
+    try:
+        # ✅ Lazy load to save memory
         embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-        index_path = os.path.join(os.path.dirname(__file__), "Documents", "index")
         vectordb = FAISS.load_local(
             folder_path=index_path,
             embeddings=embedding,
             allow_dangerous_deserialization=True
         )
 
-    llm = ChatTogether(
-        together_api_key=os.getenv("TOGETHER_API_KEY"),
-        model="mistralai/Mixtral-8x7B-Instruct-v0.1",
-        temperature=0.2
-    )
-    qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=vectordb.as_retriever())
-    result = qa_chain.invoke({"query": msg.text})
+        llm = ChatTogether(
+            together_api_key=os.getenv("TOGETHER_API_KEY"),
+            model="mistralai/Mixtral-8x7B-Instruct-v0.1",
+            temperature=0.3
+        )
 
-    return {"response": result["result"]}
+        qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=vectordb.as_retriever())
+        result = qa_chain.invoke({"query": msg.text})
 
-# Form submission
+        return {"response": result}
+
+    except Exception as e:
+        print("❌ Chat error:", e)
+        return {"response": "⚠️ Server error. Please try again later."}
+
+# ======== Form Submit Route ========
 @app.post("/submit-form")
 async def submit_form(name: str = Form(...), email: str = Form(...), phone: str = Form(...)):
     if cursor is None:
-        return JSONResponse(content={"message": "Database not connected."}, status_code=500)
+        return JSONResponse(content={"message": "❌ Database connection not available."}, status_code=500)
     try:
         cursor.execute("INSERT INTO users (name, email, phone) VALUES (%s, %s, %s)", (name, email, phone))
         db.commit()
