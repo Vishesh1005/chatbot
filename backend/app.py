@@ -10,13 +10,17 @@ load_dotenv()
 app = FastAPI()
 
 # ✅ CORS FIX: Allow GitHub Pages
+from fastapi.middleware.cors import CORSMiddleware
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://vishesh1005.github.io/chatbot/"],  # 👈 GitHub Pages domain
+    allow_origins=["https://vishesh1005.github.io"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
+
+
 
 # ✅ Lazy-load paths only
 index_path = os.path.join(os.path.dirname(__file__), "Documents", "index")
@@ -47,6 +51,10 @@ except Exception as e:
 # ======== Data Model ========
 class Message(BaseModel):
     text: str
+
+@app.get("/")
+async def root():
+    return {"message": "API is live!"}
 
 # ======== Chat Route ========
 @app.post("/chat")
