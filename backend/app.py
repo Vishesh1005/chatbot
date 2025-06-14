@@ -2,14 +2,9 @@ from fastapi import FastAPI, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-import mysql.connector
+import psycopg2
 import os
 from dotenv import load_dotenv
-from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
-from langchain_together import ChatTogether
-from langchain_huggingface import HuggingFaceEmbeddings
-
 # Load environment variables
 load_dotenv()
 
@@ -27,21 +22,23 @@ app.add_middleware(
 # ✅ Lazy-load paths only
 index_path = os.path.join(os.path.dirname(__file__), "Documents", "index")
 
-# ✅ DB Connection
+import urllib.parse
+import os
+
 try:
-    db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Vishesh@1005",
-        database="chatbot",
-        connection_timeout=5
+    db_url = os.getenv("DATABASE_URL")
+    parsed_url = urllib.parse.urlparse(db_url)
+
+    db = psycopg2.connect(
+        dbname=parsed_url.path[1:],
+        user=parsed_url.username,
+        password=parsed_url.password,
+        host=parsed_url.hostname,
+        port=parsed_url.port
     )
     cursor = db.cursor()
-    print("✅ MySQL connected.")
-except Exception as e:
-    print("❌ MySQL connection failed:", e)
-    db = None
-    cursor = None
+    print("✅ PostgreSQL connected.")
+
 
 # ======== Data Model ========
 class Message(BaseModel):
@@ -51,7 +48,15 @@ class Message(BaseModel):
 @app.post("/chat")
 async def chat(msg: Message):
     try:
-        # ✅ Lazy load to save memory
+        print("💬 Received question:", msg.text)
+
+        # ✅ Lazy load on each request
+        from langchain_community.vectorstores import FAISS
+        from langchain.chains import RetrievalQA
+        from langchain_huggingface import HuggingFaceEmbeddings
+        from langchain_together import ChatTogether
+
+        # Load embedding and FAISS index
         embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
         vectordb = FAISS.load_local(
             folder_path=index_path,
@@ -59,20 +64,23 @@ async def chat(msg: Message):
             allow_dangerous_deserialization=True
         )
 
+        # Load LLM
         llm = ChatTogether(
             together_api_key=os.getenv("TOGETHER_API_KEY"),
             model="mistralai/Mixtral-8x7B-Instruct-v0.1",
             temperature=0.3
         )
 
+        # Create chain and get answer
         qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=vectordb.as_retriever())
-        result = qa_chain.invoke({"query": msg.text})
+        response = qa_chain.invoke({"query": msg.text})
 
-        return {"response": result}
+        return {"response": response}
 
     except Exception as e:
         print("❌ Chat error:", e)
         return {"response": "⚠️ Server error. Please try again later."}
+
 
 # ======== Form Submit Route ========
 @app.post("/submit-form")
