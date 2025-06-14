@@ -7,4 +7,3 @@ langchain-together
 sentence-transformers
 faiss-cpu
 python-dotenv
-sqlite3
