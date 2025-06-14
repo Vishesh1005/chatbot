@@ -12,7 +12,7 @@ app = FastAPI()
 # ✅ CORS FIX: Allow GitHub Pages
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://vishesh1005.github.io"],  # 👈 GitHub Pages domain
+    allow_origins=["https://vishesh1005.github.io/chatbot/"],  # 👈 GitHub Pages domain
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
