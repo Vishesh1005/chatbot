@@ -9,4 +9,3 @@ langchain-huggingface
 langchain-together
 sentence-transformers
 python-multipart
-psycopg2-binary
