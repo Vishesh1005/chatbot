@@ -91,9 +91,11 @@ async def chat(msg: Message):
 async def submit_form(name: str = Form(...), email: str = Form(...), phone: str = Form(...)):
     if cursor is None:
         return JSONResponse(content={"message": "❌ Database connection not available."}, status_code=500)
+
     try:
-        cursor.execute("INSERT INTO users (name, email, phone) VALUES (%s, %s, %s)", (name, email, phone))
+        cursor.execute("INSERT INTO users (name, email, phone) VALUES (?, ?, ?)", (name, email, phone))
         db.commit()
         return JSONResponse(content={"message": "Form submitted successfully!"})
     except Exception as e:
         return JSONResponse(content={"message": f"Database Error: {str(e)}"}, status_code=500)
+
