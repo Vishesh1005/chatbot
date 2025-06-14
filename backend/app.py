@@ -2,7 +2,6 @@ from fastapi import FastAPI, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-import psycopg2
 import os
 from dotenv import load_dotenv
 # Load environment variables
@@ -21,21 +20,28 @@ app.add_middleware(
 
 # ✅ Lazy-load paths only
 index_path = os.path.join(os.path.dirname(__file__), "Documents", "index")
+import sqlite3
 
+
+# Initialize SQLite connection
 try:
-    db = psycopg2.connect(
-        dbname=parsed_url.path[1:],
-        user=parsed_url.username,
-        password=parsed_url.password,
-        host=parsed_url.hostname,
-        port=parsed_url.port
-    )
+    db = sqlite3.connect("data.db", check_same_thread=False)
     cursor = db.cursor()
-    print("✅ PostgreSQL connected.")
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            email TEXT,
+            phone TEXT
+        )
+    """)
+    db.commit()
+    print("✅ SQLite connected.")
 except Exception as e:
-    print("❌ PostgreSQL connection failed:", e)
+    print("❌ SQLite connection failed:", e)
     db = None
     cursor = None
+
 
 
 # ======== Data Model ========
