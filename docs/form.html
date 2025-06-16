@@ -27,9 +27,8 @@
       const phone = document.getElementById("phone").value.trim();
 
       try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbwUuHH79LfRs5mBzV3BwSQLPfW_VYsw49qYsyG0kDE3qnlsNLXa33HIP_1r4-jC03tU/exec", {
+        const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
           method: "POST",
-          mode: "cors", // ✅ Important for CORS on some browsers
           headers: {
             "Content-Type": "application/json"
           },
