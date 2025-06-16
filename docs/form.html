@@ -10,6 +10,9 @@
       margin: 0;
       font-family: "Segoe UI", sans-serif;
       background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     header {
@@ -32,10 +35,11 @@
     }
 
     .form-wrapper {
+      flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 85vh;
+      padding: 40px 20px;
     }
 
     .form-box {
@@ -43,25 +47,24 @@
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      width: 100%;
       max-width: 400px;
-      width: 90%;
       display: flex;
       flex-direction: column;
     }
 
     .form-box h2 {
-      margin-bottom: 20px;
       text-align: center;
+      margin-bottom: 20px;
     }
 
     .form-box input {
-      padding: 10px;
+      padding: 12px;
+      margin-bottom: 16px;
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 8px;
-      margin-bottom: 15px;
       width: 100%;
-      min-width: 280px;
     }
 
     .form-box button {
@@ -90,10 +93,6 @@
       font-size: 0.8rem;
       text-align: right;
       padding: 10px 20px;
-      position: fixed;
-      bottom: 5px;
-      right: 0;
-      width: 100%;
       color: #777;
     }
 
@@ -104,6 +103,16 @@
 
     footer a:hover {
       text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
+      .form-box {
+        padding: 20px;
+      }
+
+      .form-box input, .form-box button {
+        font-size: 0.95rem;
+      }
     }
   </style>
 </head>
@@ -157,7 +166,7 @@
           document.getElementById("status").textContent = result.message || "❌ Submission failed.";
         }
       } catch (err) {
-        console.error("Error:", err);
+        console.error("Error submitting form:", err);
         document.getElementById("status").textContent = "⚠️ Network error. Please try again later.";
       }
     });
