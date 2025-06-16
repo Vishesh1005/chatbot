@@ -1,125 +1,134 @@
-/* style.css */
-body {
+/* ===== Reset and Base ===== */
+body, html {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to right, #eef2f3, #8e9eab);
-  height: 100vh;
+  background: linear-gradient(to bottom right, #dde5ec, #c7d1db);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
+/* ===== Header ===== */
 header {
-  background: #243b55;
+  background-color: #1b355d;
   color: white;
-  padding: 1rem;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-between;
 }
 
-header img {
-  width: 40px;
-  height: auto;
+.logo {
+  display: flex;
+  align-items: center;
 }
 
-header h1 {
-  font-size: 1.5rem;
-  margin: 0;
+.logo img {
+  height: 40px;
+  margin-right: 10px;
 }
 
+.logo span {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+/* ===== Chat Area ===== */
 #chat-area {
   flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   overflow-y: auto;
-  padding: 1rem;
-  background: white;
-  border-top: 2px solid #ccc;
-  border-bottom: 2px solid #ccc;
+  max-width: 768px;
+  margin: auto;
+  width: 100%;
 }
 
-.user-message,
-.bot-message {
-  margin: 0.5rem 0;
-  padding: 0.75rem 1rem;
-  border-radius: 20px;
+.user-message, .bot-message {
+  padding: 10px 15px;
+  border-radius: 16px;
   max-width: 70%;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
 .user-message {
-  background: #dbeafe;
+  background-color: #007bff;
+  color: white;
   align-self: flex-end;
-  text-align: right;
-  margin-left: auto;
 }
 
 .bot-message {
-  background: #f3f4f6;
-  text-align: left;
-  margin-right: auto;
+  background-color: #f1f1f1;
+  color: #333;
+  align-self: flex-start;
 }
 
+/* ===== Form and Inputs ===== */
 form {
   display: flex;
-  padding: 1rem;
-  background: #fff;
-  border-top: 1px solid #ccc;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  max-width: 768px;
+  margin: auto;
+  width: 100%;
 }
 
 input[type="text"] {
-  flex-grow: 1;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  flex: 1;
+  padding: 10px 12px;
   font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
 }
 
-button {
-  background: #243b55;
+button[type="submit"], #end-chat-btn {
+  background-color: #1b355d;
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
-  margin-left: 0.5rem;
-  border-radius: 8px;
+  border-radius: 20px;
+  padding: 10px 20px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-button:hover {
-  background: #3b536f;
+button[type="submit"]:hover, #end-chat-btn:hover {
+  background-color: #152a4a;
 }
 
+/* ===== Footer Watermark ===== */
 footer {
-  font-size: 0.9rem;
-  color: #999;
+  font-size: 0.8rem;
+  padding: 5px 15px;
   text-align: right;
-  padding: 0.5rem 1rem;
-  background: transparent;
-  position: fixed;
-  bottom: 0;
-  right: 0;
+  background: none;
 }
 
 footer a {
-  color: #999;
+  color: #888;
   text-decoration: none;
 }
 
-@media (max-width: 768px) {
-  header h1 {
-    font-size: 1.2rem;
-  }
+footer a:hover {
+  text-decoration: underline;
+}
 
-  .user-message,
-  .bot-message {
-    font-size: 0.9rem;
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  form {
+    flex-direction: column;
+    gap: 8px;
   }
 
   input[type="text"] {
-    font-size: 0.9rem;
+    width: 100%;
   }
 
-  button {
-    font-size: 0.9rem;
+  button[type="submit"], #end-chat-btn {
+    width: 100%;
   }
 }
