@@ -38,4 +38,10 @@ input.addEventListener("keypress", (e) => {
     e.preventDefault();
     form.dispatchEvent(new Event("submit"));
   }
+  const res = await fetch("/submit-form", {
+  method: "POST",
+  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  body: new URLSearchParams({ name, email, phone })
+});
+
 });
