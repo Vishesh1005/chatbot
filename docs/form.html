@@ -1,21 +1,33 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Submit Details</title>
+  <title>Submit Your Details</title>
   <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
-  <div class="form-container">
-    <h2>Submit Your Details</h2>
-    <form id="user-form">
-      <input type="text" id="name" name="name" placeholder="Your Name" required />
-      <input type="email" id="email" name="email" placeholder="Email" required />
-      <input type="tel" id="phone" name="phone" placeholder="Phone Number" required />
-      <button type="submit">Submit</button>
-    </form>
-    <p id="status"></p>
-  </div>
+  <header>
+    <img src="chatbot/docs/itslogo.png" alt="College Logo">
+    <h1>ITS College Admission Form</h1>
+  </header>
+
+  <main class="form-wrapper">
+    <div class="form-container">
+      <h2>Submit Your Details</h2>
+      <form id="user-form">
+        <input type="text" id="name" name="name" placeholder="Your Name" required />
+        <input type="email" id="email" name="email" placeholder="Email" required />
+        <input type="tel" id="phone" name="phone" placeholder="Phone Number" required />
+        <button type="submit">Submit</button>
+      </form>
+      <p id="status"></p>
+    </div>
+  </main>
+
+  <footer>
+    <a href="https://www.linkedin.com/in/vishesh-dua" target="_blank">Developed by Vishesh Dua</a>
+  </footer>
 
   <script>
     const form = document.getElementById("user-form");
@@ -30,21 +42,22 @@
         const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/x-www-form-urlencoded"
           },
-          body: JSON.stringify({ name, email, phone })
+          body: new URLSearchParams({ name, email, phone })
         });
 
-        const result = await res.json();
-        if (result.result === "success") {
-          alert("✅ Form submitted successfully!");
-          window.location.href = "index.html"; // Go back to chatbot
-        } else {
-          alert("❌ Submission failed. Try again.");
+        const data = await res.json();
+        document.getElementById("status").textContent = data.message;
+
+        if (data.message.includes("success")) {
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1500);
         }
       } catch (err) {
-        console.error("Error submitting form:", err);
-        alert("⚠️ Network error. Please try again later.");
+        console.error("Form submission error:", err);
+        document.getElementById("status").textContent = "⚠️ Submission failed. Try again later.";
       }
     });
   </script>
