@@ -3,58 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <title>Submit Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- 🔵 Top Logo Bar -->
   <header>
     <div class="logo">
-      <img src="chatbot/docs/itslogo.jpg" alt="College Logo" />
+      <img src="itslogo.jpg" alt="College Logo" />
     </div>
+    <div class="header-title">ITS College Chatbot</div>
   </header>
 
-  <main class="form-wrapper">
-    <div class="form-card">
-      <h2>Submit Your Details</h2>
-      <form id="user-form">
-        <input type="text" id="name" name="name" placeholder="Your Name" required />
-        <input type="email" id="email" name="email" placeholder="Email" required />
-        <input type="tel" id="phone" name="phone" placeholder="Phone Number" required />
-        <button type="submit">Submit</button>
-        <p id="status"></p>
-      </form>
-    </div>
+  <!-- 📋 Centered Form Box -->
+  <main class="chatbox">
+    <form id="user-form" style="flex-direction: column;">
+      <input type="text" id="name" name="name" placeholder="Your Name" required />
+      <input type="email" id="email" name="email" placeholder="Email" required />
+      <input type="tel" id="phone" name="phone" placeholder="Phone Number" required />
+      <button type="submit" class="send-btn" style="margin-top: 10px;">Submit</button>
+    </form>
+    <p id="status" style="padding: 10px; color: #b00;"></p>
   </main>
 
+  <!-- 🔗 Watermark -->
   <footer>
     <a href="https://www.linkedin.com/in/vishesh-dua" target="_blank">developed by vishesh dua</a>
   </footer>
 
+  <!-- 🔄 JS Logic -->
   <script>
     const form = document.getElementById("user-form");
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const name = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
       const phone = document.getElementById("phone").value.trim();
-      const status = document.getElementById("status");
 
       try {
-        const res = await fetch("https://vishesh1005-chatbot.hf.space/submit-form", {
+        const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
           method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
           body: new URLSearchParams({ name, email, phone })
         });
 
         const result = await res.json();
-        if (result.message.includes("success")) {
+        if (result.message && result.message.includes("successfully")) {
           alert("✅ Form submitted successfully!");
           window.location.href = "index.html";
         } else {
-          alert("❌ Submission failed: " + result.message);
+          alert("❌ Submission failed. Try again.");
         }
       } catch (err) {
-        console.error("Error:", err);
-        status.textContent = "⚠️ Network error. Please try again later.";
+        console.error("Form error:", err);
+        document.getElementById("status").textContent = "⚠️ Network error. Please try again later.";
       }
     });
   </script>
