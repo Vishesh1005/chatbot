@@ -6,66 +6,118 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
   <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: #f0f2f5;
+    }
+
+    header {
+      background-color: #1b355d;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .logo img {
+      height: 45px;
+      margin-right: 15px;
+    }
+
+    .header-title {
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
+
     .form-wrapper {
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      max-width: 500px;
-      margin: 60px auto;
-      padding: 30px;
+      min-height: 85vh;
+    }
+
+    .form-box {
       background: white;
-      border-radius: 16px;
+      padding: 30px;
+      border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
     }
 
-    .form-wrapper h2 {
+    .form-box h2 {
       margin-bottom: 20px;
-      color: #1b355d;
+      text-align: center;
     }
 
-    .form-wrapper input,
-    .form-wrapper button {
-      width: 100%;
-      margin-bottom: 15px;
-      padding: 10px 14px;
+    .form-box input {
+      padding: 10px;
       font-size: 1rem;
-      border-radius: 8px;
       border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      width: 100%;
+      min-width: 280px;
     }
 
-    .form-wrapper button {
+    .form-box button {
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
       background-color: #1b355d;
       color: white;
-      border: none;
       cursor: pointer;
       transition: background 0.3s ease;
     }
 
-    .form-wrapper button:hover {
-      background-color: #132644;
+    .form-box button:hover {
+      background-color: #152a4a;
     }
 
     #status {
-      color: red;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #b00;
       text-align: center;
-      margin-top: 5px;
+    }
+
+    footer {
+      font-size: 0.8rem;
+      text-align: right;
+      padding: 10px 20px;
+      position: fixed;
+      bottom: 5px;
+      right: 0;
+      width: 100%;
+      color: #777;
+    }
+
+    footer a {
+      text-decoration: none;
+      color: #555;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
-  <!-- 🔵 Top Logo Ribbon -->
+  <!-- Header -->
   <header>
-    <div class="logo">
-      <img src="logo.png" alt="College Logo" />
-    </div>
+    <div class="logo"><img src="itslogo.jpg" alt="College Logo" /></div>
     <div class="header-title">ITS College Chatbot</div>
   </header>
 
-  <!-- 📋 Centered Form Box -->
-  <main>
-    <div class="form-wrapper">
+  <!-- Form -->
+  <div class="form-wrapper">
+    <div class="form-box">
       <h2>Submit Your Details</h2>
       <form id="user-form">
         <input type="text" id="name" name="name" placeholder="Your Name" required />
@@ -75,49 +127,41 @@
       </form>
       <p id="status"></p>
     </div>
-  </main>
+  </div>
 
-  <!-- 🔗 Footer -->
+  <!-- Footer -->
   <footer>
     <a href="https://www.linkedin.com/in/vishesh-dua" target="_blank">developed by vishesh dua</a>
   </footer>
 
-  <!-- ✅ Form Submission JS -->
+  <!-- Script -->
   <script>
     const form = document.getElementById("user-form");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-
-      const status = document.getElementById("status");
-      status.textContent = "";
+      const formData = new FormData(form);
 
       try {
         const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: new URLSearchParams({ name, email, phone })
+          body: formData
         });
 
         const result = await res.json();
-
         if (result.message && result.message.includes("success")) {
           alert("✅ Form submitted successfully!");
           window.location.href = "index.html";
         } else {
-          status.textContent = "❌ Submission failed. Try again.";
+          document.getElementById("status").textContent = result.message || "❌ Submission failed.";
         }
       } catch (err) {
-        console.error("Submission error:", err);
-        status.textContent = "⚠️ Network error. Please try again later.";
+        console.error("Error:", err);
+        document.getElementById("status").textContent = "⚠️ Network error. Please try again later.";
       }
     });
   </script>
+
 </body>
 </html>
