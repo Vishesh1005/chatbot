@@ -10,90 +10,177 @@ from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain_together import ChatTogether
 from langchain_huggingface import HuggingFaceEmbeddings
+from fastapi import Request
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse, HTMLResponse
 
-# ======== Load environment variables ========
+
+# Load environment variables
 load_dotenv()
 
-# ======== FastAPI App Initialization ========
 app = FastAPI()
 
-# CORS config for GitHub Pages frontend
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://vishesh1005.github.io"],  # Replace if custom domain
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# ===== Set Hugging Face cache path =====
+os.environ["TRANSFORMERS_CACHE"] = "/tmp/hf"
+os.environ["HF_HOME"] = "/tmp/hf"
 
-# ======== Lazy Load Vectorstore Function ========
-def load_vectordb():
-    print("🧠 Loading vector store...")
-    embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    index_path = os.path.join(os.path.dirname(__file__), "Documents", "vectorstore")
-    return FAISS.load_local(
-        folder_path=index_path,
-        embeddings=embedding,
-        allow_dangerous_deserialization=True
-    )
+# ===== Load embeddings =====
 
-# ======== SQLite Connection ========
-db_path = os.path.join(os.path.dirname(__file__), "data.db")
+# ======== Load FAISS Vector Index and Embeddings ========
+print("🧑‍🧠 Loading embeddings...")
+from langchain_huggingface import HuggingFaceEmbeddings
+embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+index_path = os.path.join(os.path.dirname(__file__), "Documents", "vectorstore")
+print("🚣️ FAISS index path:", index_path)
+
+vectordb = None
+if os.path.exists(index_path):
+    try:
+        print("📦 Loading FAISS index...")
+        vectordb = FAISS.load_local(
+            folder_path=index_path,
+            embeddings=embedding,
+            allow_dangerous_deserialization=True
+        )
+        print("✅ FAISS index loaded.")
+    except Exception as e:
+        print("❌ Failed to load FAISS index:", e)
+        traceback.print_exc()
+else:
+    print("❌ FAISS folder not found. Please run create_index.py.")
+    vectordb = None
+
+# ======== Connect to SQLite ========
+print("🗄️ Connecting to SQLite...")
 try:
-    conn = sqlite3.connect(db_path, check_same_thread=False)
+    import shutil
+
+    # Original read-only path
+    readonly_path = os.path.join(os.path.dirname(__file__), "data.db")
+    # Writable copy path
+    writable_path = "/tmp/data.db"
+
+    # Copy to writable location if not already copied
+    if not os.path.exists(writable_path):
+        shutil.copyfile(readonly_path, writable_path)
+
+    # Connect to writable copy
+    conn = sqlite3.connect(writable_path)
     cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            email TEXT,
-            phone TEXT
-        );
-    """)
-    conn.commit()
+
     print("✅ SQLite connected.")
 except Exception as e:
     print("❌ SQLite connection failed:", e)
     conn = None
     cursor = None
 
-# ======== Request Schema ========
+
+# ======== Request Data Model ========
 class Message(BaseModel):
     text: str
 
 # ======== Chat Endpoint ========
 @app.post("/chat")
 async def chat(msg: Message):
-    try:
-        print("💬 User query:", msg.text)
+    if vectordb is None:
+        return {"response": "❌ FAISS index not available."}
 
-        vectordb = load_vectordb()
+    text = msg.text.strip().lower()
+    greetings = ["hi", "hello", "hey", "good morning", "good evening", "good afternoon"]
+
+    if text in greetings:
+        return {"response": "Hello! I’m here to help with college admissions. You can ask about courses, fees, eligibility, or documents."}
+
+    try:
+        retriever = vectordb.as_retriever(search_kwargs={"k": 1})
+        docs = retriever.get_relevant_documents(msg.text)
+
+        if not docs:
+            return {"response": "Sorry, I couldn’t find any information related to that. Try asking about fees, courses, or eligibility."}
+
+        context = "\n\n".join([doc.page_content for doc in docs])
+        question = msg.text.strip()
+
+        prompt = (
+            "You are an AI assistant for ITS College admissions.\n"
+            "Only answer the question based on the context below.\n"
+            "Do not invent answers. Do not ask for more personal info.\n"
+            "Be concise. If unrelated, reply: 'I'm here to help with admissions only.'\n\n"
+            f"Context:\n{context}\n\nQuestion: {question}\nAnswer:"
+        )
 
         llm = ChatTogether(
             together_api_key=os.getenv("TOGETHER_API_KEY"),
-            model="togethercomputer/llama-2-7b-chat",  # Or try Mixtral
-            temperature=0.3
+            model="mistralai/Mixtral-8x7B-Instruct-v0.1",
+            temperature=0.2
         )
 
-        qa = RetrievalQA.from_chain_type(llm=llm, retriever=vectordb.as_retriever())
-        response = qa.run(msg.text)
-        print("✅ Response:", response)
+        response = llm.invoke(prompt)
+        return {"response": response.content}
 
-        return {"response": response}
     except Exception as e:
         print("❌ Chat error:", e)
         traceback.print_exc()
         return {"response": "⚠️ Server error. Please try again later."}
 
 # ======== Form Submission Endpoint ========
+class FormData(BaseModel):
+    name: str
+    email: str
+    phone: str
+
 @app.post("/submit-form")
-async def submit_form(name: str = Form(...), email: str = Form(...), phone: str = Form(...)):
+async def submit_form(data: FormData):
     if cursor is None:
-        return JSONResponse(content={"message": "❌ DB not available"}, status_code=500)
+        return JSONResponse(content={"message": "❌ Database connection not available."}, status_code=500)
     try:
-        cursor.execute("INSERT INTO users (name, email, phone) VALUES (?, ?, ?)", (name, email, phone))
+        cursor.execute("INSERT INTO users (name, email, phone) VALUES (?, ?, ?)", (data.name, data.email, data.phone))
         conn.commit()
-        return JSONResponse(content={"message": "Form submitted successfully!"})
+        return {"result": "success"}
     except Exception as e:
-        print("❌ DB error:", e)
-        return JSONResponse(content={"message": f"DB Error: {str(e)}"}, status_code=500)
+        return JSONResponse(content={"message": f"Database Error: {str(e)}"}, status_code=500)
+
+
+#== form data ==#
+@app.get("/submissions", response_class=HTMLResponse)
+async def view_submissions(request: Request):
+    password = request.query_params.get("key")
+
+    if password != os.getenv("ADMIN_KEY"):  # Load from .env
+        return HTMLResponse("<h3>❌ Access Denied: Invalid Key</h3>", status_code=401)
+
+    if cursor is None:
+        return "<h2>❌ Database connection not available.</h2>"
+
+
+    try:
+        cursor.execute("SELECT name, email, phone FROM users")
+        rows = cursor.fetchall()
+
+        html = """
+        <html><head><title>Submissions</title>
+        <style>
+          table { border-collapse: collapse; width: 80%; margin: auto; }
+          th, td { border: 1px solid #ccc; padding: 8px 12px; }
+          th { background: #eee; }
+          body { font-family: sans-serif; padding: 20px; text-align: center; }
+        </style>
+        </head><body><h2>Submitted User Details</h2><table>
+        <tr><th>Name</th><th>Email</th><th>Phone</th></tr>
+        """
+        for row in rows:
+            html += f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]}</td></tr>"
+        html += "</table></body></html>"
+
+        return HTMLResponse(content=html)
+
+    except Exception as e:
+        return f"<h2>❌ Error: {str(e)}</h2>"
