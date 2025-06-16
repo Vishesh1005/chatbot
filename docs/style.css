@@ -34,6 +34,13 @@ header {
   font-weight: bold;
 }
 
+.header-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-left: 20px;
+  color: white;
+}
+
 /* ===== Chat Area ===== */
 #chat-area {
   flex-grow: 1;
@@ -100,16 +107,24 @@ button[type="submit"]:hover, #end-chat-btn:hover {
   background-color: #152a4a;
 }
 
+#end-chat-btn {
+  margin: 15px auto 0;
+  display: block;
+}
+
 /* ===== Footer Watermark ===== */
 footer {
   font-size: 0.8rem;
   padding: 5px 15px;
   text-align: right;
   background: none;
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
 }
 
 footer a {
-  color: #888;
+  color: #555;
   text-decoration: none;
 }
 
@@ -130,5 +145,15 @@ footer a:hover {
 
   button[type="submit"], #end-chat-btn {
     width: 100%;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .header-title {
+    margin-left: 0;
   }
 }
