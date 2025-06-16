@@ -7,21 +7,25 @@
 </head>
 <body>
   <header>
-    <img src="chatbot/docs/itslogo.jpg" alt="College Logo" class="logo-img" />
-    <h1>ITS Chatbot</h1>
+    <div class="logo">
+      <img src="logo.png" alt="College Logo" />
+    </div>
+    <div class="header-title">ITS Chatbot</div>
   </header>
 
-  <main class="chatbox">
-    <div id="chat-area"></div>
-    <form id="chat-form">
-      <input type="text" id="user-input" placeholder="Type your question here..." autocomplete="off" />
-      <button type="submit" title="Send"><span>&#10148;</span></button>
-      <button type="button" id="end-chat-btn">End Chat</button>
-    </form>
+  <main class="chat-container">
+    <div class="chatbox">
+      <div id="chat-area" class="chat-area"></div>
+      <form id="chat-form" class="chat-form">
+        <input type="text" id="user-input" placeholder="Type your question here..." autocomplete="off" required />
+        <button type="submit" id="send-btn">➤</button>
+        <button type="button" id="end-chat-btn">End Chat</button>
+      </form>
+    </div>
   </main>
 
   <footer>
-    <a href="www.linkedin.com/in/vishesh-dua" target="_blank">developed by vishesh dua</a>
+    <a href="https://www.linkedin.com/in/vishesh-dua" target="_blank">developed by vishesh dua</a>
   </footer>
 
   <script src="script.js"></script>
