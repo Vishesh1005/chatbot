@@ -22,14 +22,14 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // ✅ Corrected to use element IDs which were previously missing
       const name = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
       const phone = document.getElementById("phone").value.trim();
 
       try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbxAnYCCnHzubnUMVm4cxU5XL4_Afnw7pulevjB0xndS221IllgCXecf7b34D3H-NNl5/exec", {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbwUuHH79LfRs5mBzV3BwSQLPfW_VYsw49qYsyG0kDE3qnlsNLXa33HIP_1r4-jC03tU/exec", {
           method: "POST",
+          mode: "cors", // ✅ Important for CORS on some browsers
           headers: {
             "Content-Type": "application/json"
           },
@@ -39,7 +39,7 @@
         const result = await res.json();
         if (result.result === "success") {
           alert("✅ Form submitted successfully!");
-          window.location.href = "index.html"; // Return to chatbot
+          window.location.href = "index.html"; // Go back to chatbot
         } else {
           alert("❌ Submission failed. Try again.");
         }
