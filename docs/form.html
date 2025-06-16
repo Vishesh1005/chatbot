@@ -6,15 +6,14 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="form-wrapper">
-    <header>
-      <div class="logo">
-        <img src="chatbot/docs/itslogo.jpg" alt="College Logo" />
-        <span>ITS College Chatbot</span>
-      </div>
-    </header>
+  <header>
+    <div class="logo">
+      <img src="chatbot/docs/itslogo.jpg" alt="College Logo" />
+    </div>
+  </header>
 
-    <main class="form-container">
+  <main class="form-wrapper">
+    <div class="form-card">
       <h2>Submit Your Details</h2>
       <form id="user-form">
         <input type="text" id="name" name="name" placeholder="Your Name" required />
@@ -23,12 +22,12 @@
         <button type="submit">Submit</button>
         <p id="status"></p>
       </form>
-    </main>
+    </div>
+  </main>
 
-    <footer>
-      <a href="https://www.linkedin.com/in/visheshdua10/" target="_blank">developed by vishesh dua</a>
-    </footer>
-  </div>
+  <footer>
+    <a href="https://www.linkedin.com/in/vishesh-dua" target="_blank">developed by vishesh dua</a>
+  </footer>
 
   <script>
     const form = document.getElementById("user-form");
@@ -37,26 +36,25 @@
       const name = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
       const phone = document.getElementById("phone").value.trim();
+      const status = document.getElementById("status");
 
       try {
-        const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
+        const res = await fetch("https://vishesh1005-chatbot.hf.space/submit-form", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: new URLSearchParams({ name, email, phone })
         });
 
         const result = await res.json();
         if (result.message.includes("success")) {
-          document.getElementById("status").textContent = "✅ Form submitted successfully!";
-          form.reset();
+          alert("✅ Form submitted successfully!");
+          window.location.href = "index.html";
         } else {
-          document.getElementById("status").textContent = "❌ Submission failed. Try again.";
+          alert("❌ Submission failed: " + result.message);
         }
       } catch (err) {
-        console.error("Error submitting form:", err);
-        document.getElementById("status").textContent = "⚠️ Network error. Please try again later.";
+        console.error("Error:", err);
+        status.textContent = "⚠️ Network error. Please try again later.";
       }
     });
   </script>
