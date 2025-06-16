@@ -46,22 +46,73 @@ header {
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   width: 90%;
   max-width: 800px;
-  height: 600px;
-  padding: 20px;
+  height: 80vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  position: relative;
 }
 
 #chat-area {
   flex-grow: 1;
   overflow-y: auto;
   background: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 12px;
   padding: 15px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+form {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  background: #fff;
+  border-top: 1px solid #ccc;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.send-btn,
+#end-chat-btn {
+  background-color: #1b355d;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.send-btn {
+  font-size: 1.2rem;
+}
+
+.send-btn:hover,
+#end-chat-btn:hover {
+  background-color: #152a4a;
+}
+
+/* Responsive Fix */
+@media (max-width: 600px) {
+  .chatbox {
+    height: 85vh;
+  }
+
+  form {
+    flex-direction: column;
+  }
+
+  .send-btn, #end-chat-btn {
+    width: 100%;
+  }
 }
 
 .user-message, .bot-message {
@@ -83,37 +134,7 @@ header {
   color: #222;
 }
 
-/* Form */
-form {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
 
-input[type="text"] {
-  flex: 1;
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-}
-
-.send-btn, #end-chat-btn {
-  background-color: #1b355d;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 15px;
-  cursor: pointer;
-}
-
-.send-btn {
-  font-size: 1.2rem;
-}
-
-.send-btn:hover, #end-chat-btn:hover {
-  background-color: #152a4a;
-}
 
 footer {
   font-size: 0.8rem;
@@ -130,22 +151,3 @@ footer a:hover {
   text-decoration: underline;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  form {
-    flex-direction: column;
-  }
-
-  .send-btn, #end-chat-btn {
-    width: 100%;
-  }
-
-  header {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .header-title {
-    font-size: 1.2rem;
-  }
-}
