@@ -18,22 +18,33 @@
   </div>
 
   <script>
-    const form = document.getElementById("user-form");
-    const status = document.getElementById("status");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(form);
-
-      const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
+  const form = document.getElementById("user-form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    try {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbxAnYCCnHzubnUMVm4cxU5XL4_Afnw7pulevjB0xndS221IllgCXecf7b34D3H-NNl5/exec", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, email, phone })
       });
+      const result = await res.json();
+      if (result.result === "success") {
+        alert("✅ Form submitted successfully!");
+        window.location.href = "index.html"; // Go back to chatbot
+      } else {
+        alert("❌ Submission failed. Try again.");
+      }
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      alert("⚠️ Network error. Please try again later.");
+    }
+  });
+</script>
 
-      const data = await res.json();
-      status.textContent = data.message;
-      form.reset();
-    });
-  </script>
 </body>
 </html>
