@@ -141,6 +141,62 @@ footer a:hover {
   input[type="text"], button[type="submit"], #end-chat-btn {
     width: 100%;
   }
+  /* ===== Form Page Styling ===== */
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #dde5ec, #c7d1db);
+}
+
+.form-container {
+  background: white;
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #1b355d;
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-container input {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.form-container button {
+  padding: 10px;
+  background-color: #1b355d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form-container button:hover {
+  background-color: #142a4a;
+}
+
+#status {
+  font-size: 0.9rem;
+  color: #e03b3b;
+  margin-top: 5px;
+}
+
 
   footer {
     text-align: center;
