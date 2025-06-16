@@ -3,27 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ITS Chatbot</title>
+  <title>ITS College Chatbot</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <img src="chatbot/docs/itslogo.jpeg" alt="College Logo" class="logo" />
+  <header class="header">
+    <img src="college-logo.png" alt="College Logo" class="logo">
     <h1>ITS College Chatbot</h1>
   </header>
 
-  <main>
-    <div id="chat-container">
-      <div id="chat-area"></div>
-      <form id="chat-form">
-        <input type="text" id="user-input" placeholder="Type your question here..." required />
-        <button type="submit">Send</button>
-      </form>
-    </div>
-    <button id="end-chat-btn">End Chat</button>
+  <main class="chat-container">
+    <div id="chat-area" class="chat-area"></div>
+    <form id="chat-form" class="chat-form">
+      <input type="text" id="user-input" placeholder="Type your question here..." autocomplete="off" required />
+      <button type="submit">Send</button>
+    </form>
+    <button id="end-chat-btn" class="end-chat">End Chat</button>
   </main>
-
+  
   <footer>
     <a href="https://www.linkedin.com/in/vishesh-dua" target="_blank" id="watermark">developed by vishesh dua</a>
   </footer>
