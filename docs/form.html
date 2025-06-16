@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -9,42 +9,45 @@
   <div class="form-container">
     <h2>Submit Your Details</h2>
     <form id="user-form">
-      <input type="text" name="name" placeholder="Your Name" required />
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="tel" name="phone" placeholder="Phone Number" required />
+      <input type="text" id="name" name="name" placeholder="Your Name" required />
+      <input type="email" id="email" name="email" placeholder="Email" required />
+      <input type="tel" id="phone" name="phone" placeholder="Phone Number" required />
       <button type="submit">Submit</button>
     </form>
     <p id="status"></p>
   </div>
 
   <script>
-  const form = document.getElementById("user-form");
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbxAnYCCnHzubnUMVm4cxU5XL4_Afnw7pulevjB0xndS221IllgCXecf7b34D3H-NNl5/exec", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name, email, phone })
-      });
-      const result = await res.json();
-      if (result.result === "success") {
-        alert("✅ Form submitted successfully!");
-        window.location.href = "index.html"; // Go back to chatbot
-      } else {
-        alert("❌ Submission failed. Try again.");
-      }
-    } catch (err) {
-      console.error("Error submitting form:", err);
-      alert("⚠️ Network error. Please try again later.");
-    }
-  });
-</script>
+    const form = document.getElementById("user-form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
+      // ✅ Corrected to use element IDs which were previously missing
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbxAnYCCnHzubnUMVm4cxU5XL4_Afnw7pulevjB0xndS221IllgCXecf7b34D3H-NNl5/exec", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name, email, phone })
+        });
+
+        const result = await res.json();
+        if (result.result === "success") {
+          alert("✅ Form submitted successfully!");
+          window.location.href = "index.html"; // Return to chatbot
+        } else {
+          alert("❌ Submission failed. Try again.");
+        }
+      } catch (err) {
+        console.error("Error submitting form:", err);
+        alert("⚠️ Network error. Please try again later.");
+      }
+    });
+  </script>
 </body>
 </html>
