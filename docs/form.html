@@ -5,33 +5,84 @@
   <title>Submit Details</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .form-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      max-width: 500px;
+      margin: 60px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-wrapper h2 {
+      margin-bottom: 20px;
+      color: #1b355d;
+    }
+
+    .form-wrapper input,
+    .form-wrapper button {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px 14px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .form-wrapper button {
+      background-color: #1b355d;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .form-wrapper button:hover {
+      background-color: #132644;
+    }
+
+    #status {
+      color: red;
+      text-align: center;
+      margin-top: 5px;
+    }
+  </style>
 </head>
 <body>
-  <!-- 🔵 Top Logo Bar -->
+
+  <!-- 🔵 Top Logo Ribbon -->
   <header>
     <div class="logo">
-      <img src="itslogo.jpg" alt="College Logo" />
+      <img src="logo.png" alt="College Logo" />
     </div>
     <div class="header-title">ITS College Chatbot</div>
   </header>
 
   <!-- 📋 Centered Form Box -->
-  <main class="chatbox">
-    <form id="user-form" style="flex-direction: column;">
-      <input type="text" id="name" name="name" placeholder="Your Name" required />
-      <input type="email" id="email" name="email" placeholder="Email" required />
-      <input type="tel" id="phone" name="phone" placeholder="Phone Number" required />
-      <button type="submit" class="send-btn" style="margin-top: 10px;">Submit</button>
-    </form>
-    <p id="status" style="padding: 10px; color: #b00;"></p>
+  <main>
+    <div class="form-wrapper">
+      <h2>Submit Your Details</h2>
+      <form id="user-form">
+        <input type="text" id="name" name="name" placeholder="Your Name" required />
+        <input type="email" id="email" name="email" placeholder="Email" required />
+        <input type="tel" id="phone" name="phone" placeholder="Phone Number" required />
+        <button type="submit">Submit</button>
+      </form>
+      <p id="status"></p>
+    </div>
   </main>
 
-  <!-- 🔗 Watermark -->
+  <!-- 🔗 Footer -->
   <footer>
     <a href="https://www.linkedin.com/in/vishesh-dua" target="_blank">developed by vishesh dua</a>
   </footer>
 
-  <!-- 🔄 JS Logic -->
+  <!-- ✅ Form Submission JS -->
   <script>
     const form = document.getElementById("user-form");
 
@@ -41,6 +92,9 @@
       const name = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
       const phone = document.getElementById("phone").value.trim();
+
+      const status = document.getElementById("status");
+      status.textContent = "";
 
       try {
         const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
@@ -52,15 +106,16 @@
         });
 
         const result = await res.json();
-        if (result.message && result.message.includes("successfully")) {
+
+        if (result.message && result.message.includes("success")) {
           alert("✅ Form submitted successfully!");
           window.location.href = "index.html";
         } else {
-          alert("❌ Submission failed. Try again.");
+          status.textContent = "❌ Submission failed. Try again.";
         }
       } catch (err) {
-        console.error("Form error:", err);
-        document.getElementById("status").textContent = "⚠️ Network error. Please try again later.";
+        console.error("Submission error:", err);
+        status.textContent = "⚠️ Network error. Please try again later.";
       }
     });
   </script>
