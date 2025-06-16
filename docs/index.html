@@ -2,26 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ITS Admission Help</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITS Chatbot</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="chat-container">
-    <!-- 🎓 Header Ribbon -->
-    <div class="chat-header">ITS Admission Help</div>
+  <header>
+    <img src="college-logo.png" alt="College Logo" class="logo" />
+    <h1>ITS College Chatbot</h1>
+  </header>
 
-    <!-- 💬 Chat Display Area -->
-    <div id="chat-area" class="chat-area"></div>
+  <main>
+    <div id="chat-container">
+      <div id="chat-area"></div>
+      <form id="chat-form">
+        <input type="text" id="user-input" placeholder="Type your question here..." required />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+    <button id="end-chat-btn">End Chat</button>
+  </main>
 
-    <!-- 📝 User Input -->
-    <form id="chat-form" class="chat-form">
-      <input type="text" id="user-input" placeholder="Ask about admission..." required />
-      <button type="submit">Send</button>
-    </form>
-    <button id="end-chat-btn" class="end-chat-btn">End Chat</button>
-  </div>
+  <footer>
+    <a href="https://www.linkedin.com/in/visheshdua10" target="_blank" id="watermark">developed by vishesh dua</a>
+  </footer>
 
-  <!-- ⚙️ Script -->
   <script src="script.js"></script>
 </body>
 </html>
