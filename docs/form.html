@@ -23,33 +23,45 @@
     </form>
   </main>
 
-  <script>
-    document.getElementById("userForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formStatus = document.getElementById("formStatus");
+ <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("userForm");
+  const responseMessage = document.getElementById("responseMessage");
 
-      const formData = new FormData(e.target);
-      const data = new URLSearchParams(formData);
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      try {
-        const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
-          method: "POST",
-          body: data,
-        });
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
 
-        const result = await res.json();
-        if (res.ok) {
-          formStatus.textContent = result.message;
-          setTimeout(() => {
-            window.location.href = "index.html";
-          }, 1500);
-        } else {
-          formStatus.textContent = result.message || "Submission failed.";
-        }
-      } catch (err) {
-        formStatus.textContent = "Error connecting to server.";
+    if (!name || !email || !phone) {
+      responseMessage.textContent = "⚠️ Please fill in all fields.";
+      return;
+    }
+
+    try {
+      const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone })
+      });
+
+      const result = await res.json();
+
+      if (res.ok && result.result === "success") {
+        responseMessage.textContent = "✅ Submitted successfully!";
+        form.reset();
+      } else {
+        responseMessage.textContent = "❌ Submission failed. Please try again.";
       }
-    });
-  </script>
+    } catch (err) {
+      console.error(err);
+      responseMessage.textContent = "❌ Server error. Try again later.";
+    }
+  });
+});
+</script>
+
 </body>
 </html>
