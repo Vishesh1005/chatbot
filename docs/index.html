@@ -2,25 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ITS College Chatbot</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="header">
-    <img src="itslogo.jpg" alt="College Logo" class="logo" />
-    <div class="title">ITS College Chatbot</div>
-  </div>
-  <div class="main">
-    <div class="chat-box">
-      <div id="chatBox" class="messages"></div>
-      <form id="chatForm" class="chat-form">
-        <input type="text" id="userInput" placeholder="Type your message..." required />
-        <button type="submit">Send</button>
-        <button type="button" id="endChatBtn">End Chat</button>
-      </form>
+  <header class="chat-header">
+    <img src="itslogo.jpg" alt="ITS Logo" class="logo"/>
+    <h1 class="title">ITS College Chatbot</h1>
+  </header>
+
+  <main class="chat-container" id="chatContainer">
+    <div id="chatBox" class="chat-box">
+      <div class="bot-message">Hi, are you interested in admission? What would you like to know?</div>
     </div>
-  </div>
+  </main>
+
+  <form id="chatForm" class="chat-form">
+    <input type="text" id="userInput" placeholder="Type your message..." required />
+    <button type="submit">Send</button>
+    <button type="button" id="endChatBtn">End Chat</button>
+  </form>
+
   <script src="script.js"></script>
 </body>
 </html>
