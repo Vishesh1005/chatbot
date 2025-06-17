@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Form
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import os
 import traceback
@@ -11,7 +10,6 @@ from langchain.chains import RetrievalQA
 from langchain_together import ChatTogether
 from langchain_huggingface import HuggingFaceEmbeddings
 from fastapi import Request
-from pydantic import BaseModel
 from fastapi.responses import JSONResponse, HTMLResponse
 
 
@@ -93,7 +91,7 @@ async def chat(msg: Message):
     if vectordb is None:
         return {"response": "❌ FAISS index not available."}
 
-    text = msg.text.strip().lower()
+    text = msg.message.strip().lower()
     greetings = ["hi", "hello", "hey", "good morning", "good evening", "good afternoon"]
 
     if text in greetings:
@@ -144,7 +142,7 @@ async def submit_form(data: FormData):
     try:
         cursor.execute("INSERT INTO users (name, email, phone) VALUES (?, ?, ?)", (data.name, data.email, data.phone))
         conn.commit()
-        return {"result": "success"}
+        return {"message": "✅ Form submitted successfully!"}
     except Exception as e:
         return JSONResponse(content={"message": f"Database Error: {str(e)}"}, status_code=500)
 
