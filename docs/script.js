@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     userInput.value = "";
 
     try {
-      const res = await fetch("https://<your-backend-url>/chat", {
+      const res = await fetch("https://Vishesh1005-chatbot.hf.space/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
