@@ -7,59 +7,45 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <img src="logo.png" alt="College Logo" id="collegeLogo" />
-    <h1 id="title">Admission Form</h1>
-  </header>
-
-  <!-- Form Container -->
-  <main>
-    <div id="formContainer">
+  <div class="header">
+    <img src="logo.png" alt="College Logo" class="logo" />
+    <div class="title">ITS College Admission Form</div>
+  </div>
+  <div class="main">
+    <div class="form-box">
       <form id="userForm">
-        <input type="text" id="name" name="name" placeholder="Full Name" required />
-        <input type="email" id="email" name="email" placeholder="Email Address" required />
-        <input type="tel" id="phone" name="phone" placeholder="Phone Number" pattern="[0-9]{10}" required />
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <input type="tel" name="phone" placeholder="Your Phone Number" pattern="[0-9]{10}" required />
         <button type="submit">Submit</button>
-        <p id="formStatus"></p>
       </form>
+      <p id="formStatus"></p>
     </div>
-  </main>
-
+  </div>
   <script>
-    const form = document.getElementById("userForm");
-    const status = document.getElementById("formStatus");
-
-    form.addEventListener("submit", async (e) => {
+    document.getElementById("userForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const name = form.name.value.trim();
-      const email = form.email.value.trim();
-      const phone = form.phone.value.trim();
-
-      if (!name || !email || !phone) {
-        status.textContent = "❗ All fields are required.";
-        return;
-      }
-
+      const form = e.target;
+      const data = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        phone: form.phone.value.trim(),
+      };
       try {
         const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, phone }),
+          body: JSON.stringify(data),
         });
-
-        const data = await res.json();
-        if (data.result === "success") {
-          status.textContent = "✅ Submitted successfully!";
+        const result = await res.json();
+        if (result.result === "success") {
+          document.getElementById("formStatus").textContent = "✅ Form submitted successfully!";
           form.reset();
-          setTimeout(() => {
-            window.location.href = "index.html";
-          }, 1500);
         } else {
-          status.textContent = "❌ Submission failed.";
+          document.getElementById("formStatus").textContent = "❌ Submission failed.";
         }
-      } catch (err) {
-        status.textContent = "⚠️ Server error. Try again.";
+      } catch (error) {
+        document.getElementById("formStatus").textContent = "⚠️ Error submitting form.";
       }
     });
   </script>
