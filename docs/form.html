@@ -2,50 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admission Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit Your Details</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="header">
-    <img src="logo.png" alt="College Logo" class="logo" />
-    <div class="title">ITS College Admission Form</div>
-  </div>
-  <div class="main">
-    <div class="form-box">
-      <form id="userForm">
-        <input type="text" name="name" placeholder="Your Name" required />
-        <input type="email" name="email" placeholder="Your Email" required />
-        <input type="tel" name="phone" placeholder="Your Phone Number" pattern="[0-9]{10}" required />
-        <button type="submit">Submit</button>
-      </form>
-      <p id="formStatus"></p>
-    </div>
-  </div>
+  <header class="chat-header">
+    <img src="itslogo.jpg" alt="ITS Logo" class="logo"/>
+    <h1 class="title">ITS College Chatbot</h1>
+  </header>
+
+  <main class="form-container">
+    <form id="userForm" class="user-form">
+      <h2>Submit Your Details</h2>
+      <input type="text" id="name" name="name" placeholder="Your Name" required />
+      <input type="email" id="email" name="email" placeholder="Your Email" required />
+      <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required />
+      <button type="submit">Submit</button>
+      <p id="formStatus" class="form-status"></p>
+    </form>
+  </main>
+
   <script>
     document.getElementById("userForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const form = e.target;
-      const data = {
-        name: form.name.value.trim(),
-        email: form.email.value.trim(),
-        phone: form.phone.value.trim(),
-      };
+      const formStatus = document.getElementById("formStatus");
+
+      const formData = new FormData(e.target);
+      const data = new URLSearchParams(formData);
+
       try {
-        const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
+        const res = await fetch("https://<your-backend-url>/submit-form", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: data,
         });
+
         const result = await res.json();
-        if (result.result === "success") {
-          document.getElementById("formStatus").textContent = "✅ Form submitted successfully!";
-          form.reset();
+        if (res.ok) {
+          formStatus.textContent = result.message;
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1500);
         } else {
-          document.getElementById("formStatus").textContent = "❌ Submission failed.";
+          formStatus.textContent = result.message || "Submission failed.";
         }
-      } catch (error) {
-        document.getElementById("formStatus").textContent = "⚠️ Error submitting form.";
+      } catch (err) {
+        formStatus.textContent = "Error connecting to server.";
       }
     });
   </script>
