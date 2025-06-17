@@ -2,52 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Submit Your Details</title>
+  <title>Submit Details</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="chat-header">
-    <img src="itslogo.jpg" alt="ITS Logo" class="logo"/>
-    <h1 class="title">ITS College Chatbot</h1>
-  </header>
-
-  <main class="form-container">
-    <form id="userForm" class="user-form">
+  <div class="form-wrapper">
+    <div class="form-box">
       <h2>Submit Your Details</h2>
-      <input type="text" id="name" name="name" placeholder="Your Name" required />
-      <input type="email" id="email" name="email" placeholder="Your Email" required />
-      <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required />
-      <button type="submit">Submit</button>
-      <p id="formStatus" class="form-status"></p>
-    </form>
-  </main>
+      <form id="user-form">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="tel" name="phone" placeholder="Phone Number" required />
+        <button type="submit">Submit</button>
+        <p id="status"></p>
+      </form>
+    </div>
+  </div>
 
   <script>
-    document.getElementById("userForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formStatus = document.getElementById("formStatus");
+    const form = document.getElementById("user-form");
+    const status = document.getElementById("status");
 
-      const formData = new FormData(e.target);
-      const data = new URLSearchParams(formData);
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
 
       try {
-        const res = await fetch("https://<your-backend-url>/submit-form", {
+        const res = await fetch("http://localhost:8000/submit-form", {
           method: "POST",
-          body: data,
+          body: formData
         });
 
-        const result = await res.json();
-        if (res.ok) {
-          formStatus.textContent = result.message;
-          setTimeout(() => {
-            window.location.href = "index.html";
-          }, 1500);
-        } else {
-          formStatus.textContent = result.message || "Submission failed.";
-        }
+        const data = await res.json();
+        status.textContent = data.message;
+        status.style.color = "green";
+        form.reset();
       } catch (err) {
-        formStatus.textContent = "Error connecting to server.";
+        status.textContent = "Something went wrong!";
+        status.style.color = "red";
       }
     });
   </script>
