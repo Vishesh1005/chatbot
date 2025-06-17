@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("https://Vishesh1005-chatbot.hf.space/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ text: message })  // ✅ Corrected here
       });
       const data = await res.json();
       addMessage("bot", data.response);
