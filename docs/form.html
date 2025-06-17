@@ -2,66 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Submit Your Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admission Form</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="chat-header">
-    <img src="itslogo.jpg" alt="ITS Logo" class="logo"/>
-    <h1 class="title">ITS College Chatbot</h1>
+  <!-- Header -->
+  <header>
+    <img src="logo.png" alt="College Logo" id="collegeLogo" />
+    <h1 id="title">Admission Form</h1>
   </header>
 
-  <main class="form-container">
-    <form id="userForm" class="user-form">
-      <h2>Submit Your Details</h2>
-      <input type="text" id="name" name="name" placeholder="Your Name" required />
-      <input type="email" id="email" name="email" placeholder="Your Email" required />
-      <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required />
-      <button type="submit">Submit</button>
-      <p id="formStatus" class="form-status"></p>
-    </form>
+  <!-- Form Container -->
+  <main>
+    <div id="formContainer">
+      <form id="userForm">
+        <input type="text" id="name" name="name" placeholder="Full Name" required />
+        <input type="email" id="email" name="email" placeholder="Email Address" required />
+        <input type="tel" id="phone" name="phone" placeholder="Phone Number" pattern="[0-9]{10}" required />
+        <button type="submit">Submit</button>
+        <p id="formStatus"></p>
+      </form>
+    </div>
   </main>
 
- <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("userForm");
-  const responseMessage = document.getElementById("responseMessage");
+  <script>
+    const form = document.getElementById("userForm");
+    const status = document.getElementById("formStatus");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const phone = form.phone.value.trim();
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-
-    if (!name || !email || !phone) {
-      responseMessage.textContent = "⚠️ Please fill in all fields.";
-      return;
-    }
-
-    try {
-      const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone })
-      });
-
-      const result = await res.json();
-
-      if (res.ok && result.result === "success") {
-        responseMessage.textContent = "✅ Submitted successfully!";
-        form.reset();
-      } else {
-        responseMessage.textContent = "❌ Submission failed. Please try again.";
+      if (!name || !email || !phone) {
+        status.textContent = "❗ All fields are required.";
+        return;
       }
-    } catch (err) {
-      console.error(err);
-      responseMessage.textContent = "❌ Server error. Try again later.";
-    }
-  });
-});
-</script>
 
+      try {
+        const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, phone }),
+        });
+
+        const data = await res.json();
+        if (data.result === "success") {
+          status.textContent = "✅ Submitted successfully!";
+          form.reset();
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1500);
+        } else {
+          status.textContent = "❌ Submission failed.";
+        }
+      } catch (err) {
+        status.textContent = "⚠️ Server error. Try again.";
+      }
+    });
+  </script>
 </body>
 </html>
