@@ -7,24 +7,20 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <img src="logo.png" alt="College Logo" id="collegeLogo" />
-    <h1 id="title">ITS Chatbot</h1>
-  </header>
-
-  <!-- Chat Container -->
-  <main>
-    <div id="chatContainer">
-      <div id="chatBox"></div>
-      <form id="chatForm">
+  <div class="header">
+    <img src="logo.png" alt="College Logo" class="logo" />
+    <div class="title">ITS College Chatbot</div>
+  </div>
+  <div class="main">
+    <div class="chat-box">
+      <div id="chatBox" class="messages"></div>
+      <form id="chatForm" class="chat-form">
         <input type="text" id="userInput" placeholder="Type your message..." required />
-        <button type="submit" id="sendBtn">Send</button>
+        <button type="submit">Send</button>
         <button type="button" id="endChatBtn">End Chat</button>
       </form>
     </div>
-  </main>
-
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
