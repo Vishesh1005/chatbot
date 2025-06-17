@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const chatBox = document.getElementById("chatBox");
-  const chatForm = document.getElementById("chatForm");
-  const userInput = document.getElementById("userInput");
-  const endChatBtn = document.getElementById("endChatBtn");
+  const chatBox = document.getElementById("chat-area");
+  const chatForm = document.getElementById("chat-form");
+  const userInput = document.getElementById("user-input");
 
-  // Send message on form submit
   chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const message = userInput.value.trim();
@@ -17,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("https://Vishesh1005-chatbot.hf.space/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: message })  // ✅ Corrected here
+        body: JSON.stringify({ text: message })
       });
       const data = await res.json();
       addMessage("bot", data.response);
@@ -26,17 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Allow pressing Enter to send
   userInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       chatForm.dispatchEvent(new Event("submit"));
     }
-  });
-
-  // End Chat and show form
-  endChatBtn.addEventListener("click", () => {
-    window.location.href = "form.html";
   });
 
   function addMessage(sender, text) {
