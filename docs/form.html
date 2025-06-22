@@ -19,29 +19,38 @@
     </div>
   </div>
 
-  <script>
-    const form = document.getElementById("user-form");
-    const status = document.getElementById("status");
+<script>
+  const form = document.getElementById("user-form");
+  const status = document.getElementById("status");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(form);
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      try {
-        const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
-          method: "POST",
-          body: formData
-        });
+    const name = form.elements["name"].value.trim();
+    const email = form.elements["email"].value.trim();
+    const phone = form.elements["phone"].value.trim();
 
-        const data = await res.json();
-        status.textContent = data.message;
-        status.style.color = "green";
-        form.reset();
-      } catch (err) {
-        status.textContent = "Something went wrong!";
-        status.style.color = "red";
-      }
-    });
-  </script>
+    const payload = { name, email, phone };
+
+    try {
+      const res = await fetch("https://Vishesh1005-chatbot.hf.space/submit-form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      status.textContent = data.message;
+      status.style.color = "green";
+      form.reset();
+    } catch (err) {
+      status.textContent = "Something went wrong!";
+      status.style.color = "red";
+    }
+  });
+</script>
+
 </body>
 </html>
