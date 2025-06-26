@@ -2,24 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ITS Admission Help</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header">
-      <img src="itslogo.jpg" alt="Logo" class="logo" />
-      <h1>ITS Admission Help</h1>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-content">
+      <div class="navbar-logo">
+        <img src="itslogo.jpg" alt="ITS Logo" />
+        <h1>ITS Admission Portal</h1>
+      </div>
+      <div class="navbar-links">
+        <a href="https://facebook.com/itsengineering" class="social-btn facebook" target="_blank" title="Facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://twitter.com/itsengineering" class="social-btn twitter" target="_blank" title="Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="https://linkedin.com/school/itsengineering" class="social-btn linkedin" target="_blank" title="LinkedIn">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="https://instagram.com/itsengineering" class="social-btn instagram" target="_blank" title="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
     </div>
+  </nav>
 
-    <div id="chat-area" class="chat-area"></div>
+  <!-- Main Container -->
+  <div class="main-container">
+    <div class="chat-container">
+      <div class="chat-header">
+        <img src="itslogo.jpg" alt="Logo" class="logo" />
+        <h1>ITS Admission Assistant</h1>
+      </div>
 
-    <form id="chat-form" class="chat-form">
-      <input type="text" id="user-input" placeholder="Ask about admission..." required />
-      <button type="submit">Send</button>
-      <button type="button" onclick="location.href='form.html'">End Chat</button>
-    </form>
+      <div id="chat-area" class="chat-area"></div>
+
+      <form id="chat-form" class="chat-form">
+        <input type="text" id="user-input" placeholder="Ask about admission, courses, fees..." required />
+        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        <button type="button" onclick="location.href='form.html'">End Chat</button>
+      </form>
+    </div>
   </div>
+
+  <!-- WhatsApp Chat Button -->
+  <a href="https://wa.me/+919876543210?text=Hello,%20I%20need%20help%20with%20ITS%20admission" class="whatsapp-btn" target="_blank" title="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
 
   <script src="script.js"></script>
 </body>
