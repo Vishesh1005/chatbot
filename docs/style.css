@@ -39,8 +39,9 @@ body {
 }
 
 .navbar-logo img {
-  width: 345px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .navbar-logo h1 {
