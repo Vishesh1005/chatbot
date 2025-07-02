@@ -562,26 +562,36 @@ body {
     border-top-width: 5px;
     border-bottom-width: 5px;
   }
-
+  
+.form-wrapper {
+    padding: 100px 1rem 1rem 1rem;
+  }
+  
+/* Updated Footer to match Navbar design */
 .footer {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  padding: 15px 20px;
-  text-align: center;
-  font-size: 13px;
-  color: #555;
+  padding: 1rem 2rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 8px;
   flex-wrap: wrap;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
 }
 
 .developer-link {
@@ -590,16 +600,22 @@ body {
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   transition: all 0.3s ease;
-  padding: 2px 4px;
-  border-radius: 4px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(102, 126, 234, 0.1);
 }
 
 .developer-link:hover {
   color: #764ba2;
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(102, 126, 234, 0.2);
   transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.developer-link i {
+  font-size: 16px;
 }
 
 .mentor-name {
@@ -607,17 +623,61 @@ body {
   font-weight: 600;
 }
 
-@media (max-width: 480px) {
+/* Adjust main container to account for fixed footer */
+.main-container {
+  padding-top: 80px;
+  padding-bottom: 80px; /* Add space for fixed footer */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Mobile Responsive Footer */
+@media (max-width: 768px) {
   .footer {
-    padding: 12px 15px;
-    font-size: 12px;
+    padding: 0.8rem 1rem;
   }
   
   .footer-content {
-    flex-direction: column;
-    gap: 3px;
+    font-size: 13px;
+    gap: 6px;
   }
-.form-wrapper {
-    padding: 100px 1rem 1rem 1rem;
+  
+  .developer-link {
+    padding: 3px 6px;
+    gap: 4px;
+  }
+  
+  .developer-link i {
+    font-size: 14px;
   }
 }
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .footer-content {
+    font-size: 12px;
+    gap: 4px;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .developer-link {
+    padding: 2px 4px;
+    gap: 3px;
+  }
+  
+  .developer-link i {
+    font-size: 12px;
+  }
+  
+  .main-container {
+    padding-bottom: 100px; /* More space on mobile for stacked footer content */
+  }
+}
+
+
