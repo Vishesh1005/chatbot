@@ -135,7 +135,7 @@ body {
 @media (min-width: 769px) {
   .chat-container {
     width: 450px;
-    height: 600px;
+    height: 500px;
   }
   
   .main-container {
@@ -444,7 +444,7 @@ body {
 
 /* Form Page Styles */
 .form-wrapper {
-  min-height: 100vh;
+  min-height: 94vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   justify-content: center;
