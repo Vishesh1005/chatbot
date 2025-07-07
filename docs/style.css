@@ -110,12 +110,12 @@ body {
 
 /* Main Container */
 .main-container {
-  padding-top: 80px;
+  padding-top: 50px;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 1rem;
+  padding-bottom: 2px;
 }
 
 /* Chat Container */
@@ -135,7 +135,7 @@ body {
 @media (min-width: 769px) {
   .chat-container {
     width: 450px;
-    height: 500px;
+    height: 425px;
   }
   
   .main-container {
