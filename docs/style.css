@@ -569,6 +569,7 @@ body {
   gap: 4px;
 }
 
+
 /* Mobile Responsive */
 @media (max-width: 480px) {
   .navbar {
@@ -627,11 +628,19 @@ body {
   .footer {
     padding: 8px 1rem;
     font-size: 12px;
+    text-align: center;
   }
 
   .footer-content {
     flex-direction: column;
     gap: 4px;
+  }
+  
+  footer .developer-link,
+  footer .mentor-name{
+    display: block;
+    margin: 4px 0;
+    font-size: 10px;
   }
 
   .main-container {
